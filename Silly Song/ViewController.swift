@@ -7,39 +7,41 @@
 //
 
 import UIKit
-
+//MARK:- ViewController: UIViewController
 class ViewController: UIViewController {
+    //MARK:- Outlets
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var lyricsView: UITextView!
     
+    //MARK:- View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         nameField.delegate = self
         // Do any additional setup after loading the view, typically from a nib.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
+    //MARK:- Reset the lyric and namefield
     @IBAction func reset(_ sender: Any) {
         nameField.text = nil
         lyricsView.text = nil
     }
+    // MARK:- Display the lyrics
     @IBAction func displayLyrics(_ sender: Any) {
-        
+        lyricsView.text = lyricsForName(lyricsTemplate: bananaFanaTemplate, fullName: nameField.text!)
     }
-
-}
-func shortNameForName(name : String) -> String{
-    let lowercaseName = name.lowercased()
-    let vowelSet = CharacterSet(charactersIn: "aeiou")
     
+}
+//MARK:- Function to get a short name
+func shortNameForName(name : String) -> String{
+    var lowercaseName = name.lowercased()
+    let vowelSet = CharacterSet(charactersIn: "aeiou")
+    if let range = lowercaseName.rangeOfCharacter(from: vowelSet){
+        let vowelStr = lowercaseName.substring(with: range)
+        lowercaseName =  lowercaseName.substring(from: lowercaseName.index(after: vowelStr.startIndex))
+    }
     return lowercaseName
 }
 
-
+//MARK:- Lyrics as per template
 func lyricsForName(lyricsTemplate: String, fullName: String) -> String {
     // ...
     let shortName = shortNameForName(name: fullName)
